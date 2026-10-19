@@ -13,7 +13,7 @@ flutter run -d chrome --dart-define=API_URL=https://sandbox.badrgo.com
 
 `API_URL` defaults to `https://sandbox.badrgo.com`, so you can leave out the `--dart-define`. The WebSocket URL is derived from it (`https` becomes `wss`, plus `/ws`).
 
-Sign in with any demo account; the password is `Demo@12345`. The sign-in screen has a "Sandbox demo accounts" list that fills in the email for you. The password is never stored in the repo.
+Sign in with any demo account, using the password from the assessment brief. The sign-in screen has a "Sandbox demo accounts" list that fills in the email for you. No password is stored in the repo.
 
 ```bash
 flutter test      # 92 tests: permissions, navigation, transports, trip rules, live lists, role-based widget tests

@@ -119,6 +119,12 @@ A dropped realtime connection while the API is up is a different case: it only s
 
 An open SOS shows a red banner above every page, with Open trip, Acknowledge (if permitted) and Hide. The banner pulses when a new one arrives. The browser tab title shows `(3) SOS`, so it is noticed even in a background tab. The Alerts item in the navigation has a badge.
 
+## Branding
+
+Colours and type follow [badrgo.com](https://badrgo.com/qa/): brand red `#CF1B1C` for primary actions, selection and the wordmark, neutral greys for text and surfaces, and Clash Grotesk for headings and the "badrgo" wordmark. Status colours stay semantic (in-progress trips are violet, not red), because red in an operations console means an error or an SOS.
+
+Clash Grotesk's licence (ITF Free Font License) does not allow putting the font files in a repository, so they are not committed. `BrandFont.load` fetches them from Fontshare's own servers at start-up, which the licence allows. If that fails (offline or blocked), headings fall back to the default font and the app works the same.
+
 ## Package choices
 
 | Package | Why |

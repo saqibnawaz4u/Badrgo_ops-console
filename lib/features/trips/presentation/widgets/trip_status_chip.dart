@@ -8,7 +8,7 @@ Color tripStatusColor(BuildContext context, TripStatus status) {
   return switch (status) {
     TripStatus.requested => ops.warning,
     TripStatus.assigned => ops.info,
-    TripStatus.inProgress => Theme.of(context).colorScheme.primary,
+    TripStatus.inProgress => ops.progress,
     TripStatus.completed => ops.success,
     TripStatus.cancelled => ops.danger,
   };

@@ -7,6 +7,7 @@ import '../../../core/connectivity/presentation/connectivity_cubit.dart';
 import '../../../core/connectivity/presentation/maintenance_view.dart';
 import '../../../core/permissions/permissions.dart';
 import '../../../core/presentation/theme_cubit.dart';
+import '../../../core/presentation/widgets/brand_mark.dart';
 import '../../../core/presentation/widgets/page_header.dart';
 import '../../../core/realtime/live_status_cubit.dart';
 import '../../../core/realtime/realtime_status.dart';
@@ -18,12 +19,12 @@ import '../../auth/presentation/bloc/auth_bloc.dart';
 import '../domain/navigation_policy.dart';
 
 IconData _iconFor(AppSection section) => switch (section) {
-      AppSection.dashboard => Icons.space_dashboard_outlined,
-      AppSection.trips => Icons.route_outlined,
-      AppSection.liveMap => Icons.map_outlined,
-      AppSection.alerts => Icons.notifications_outlined,
-      AppSection.users => Icons.manage_accounts_outlined,
-    };
+  AppSection.dashboard => Icons.space_dashboard_outlined,
+  AppSection.trips => Icons.route_outlined,
+  AppSection.liveMap => Icons.map_outlined,
+  AppSection.alerts => Icons.notifications_outlined,
+  AppSection.users => Icons.manage_accounts_outlined,
+};
 
 /// Signed-in frame: navigation built from permissions, the user's identity,
 /// live-connection status and the app-wide banners (SOS, reconnecting,
@@ -45,57 +46,65 @@ class AppShell extends StatelessWidget {
     final selectedIndex = destinations.indexWhere((d) => d.section == current?.section);
     final canReadAlerts = user.permissions.can(Permission.alertRead);
 
-    final scaffold = LayoutBuilder(builder: (context, constraints) {
-      final wide = constraints.maxWidth >= 800;
-      final extended = constraints.maxWidth >= 1280;
-      final body = Column(children: [
-        if (canReadAlerts) const CriticalAlertBanner(),
-        const _ConnectionStrip(),
-        Expanded(child: child),
-      ]);
-      return Scaffold(
-        appBar: _TopBar(user: user, showMenuButton: !wide),
-        drawer: wide
-            ? null
-            : Drawer(
-                child: SafeArea(
-                  child: ListView(children: [
-                    for (final (i, d) in destinations.indexed)
-                      ListTile(
-                        leading: Icon(_iconFor(d.section)),
-                        title: Text(d.label),
-                        selected: i == selectedIndex,
-                        onTap: () {
-                          Navigator.pop(context);
-                          context.go(d.path);
-                        },
-                      ),
-                  ]),
+    final scaffold = LayoutBuilder(
+      builder: (context, constraints) {
+        final wide = constraints.maxWidth >= 800;
+        final extended = constraints.maxWidth >= 1280;
+        final body = Column(
+          children: [
+            if (canReadAlerts) const CriticalAlertBanner(),
+            const _ConnectionStrip(),
+            Expanded(child: child),
+          ],
+        );
+        return Scaffold(
+          appBar: _TopBar(user: user, showMenuButton: !wide),
+          drawer: wide
+              ? null
+              : Drawer(
+                  child: SafeArea(
+                    child: ListView(
+                      children: [
+                        for (final (i, d) in destinations.indexed)
+                          ListTile(
+                            leading: Icon(_iconFor(d.section)),
+                            title: Text(d.label),
+                            selected: i == selectedIndex,
+                            onTap: () {
+                              Navigator.pop(context);
+                              context.go(d.path);
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-        body: wide && destinations.length > 1
-            ? Row(children: [
-                NavigationRail(
-                  extended: extended,
-                  selectedIndex: selectedIndex < 0 ? null : selectedIndex,
-                  labelType: extended ? NavigationRailLabelType.none : NavigationRailLabelType.all,
-                  onDestinationSelected: (i) => context.go(destinations[i].path),
-                  destinations: [
-                    for (final d in destinations)
-                      NavigationRailDestination(
-                        icon: d.section == AppSection.alerts && canReadAlerts
-                            ? _AlertsIcon(icon: _iconFor(d.section))
-                            : Icon(_iconFor(d.section)),
-                        label: Text(d.label),
-                      ),
+          body: wide && destinations.length > 1
+              ? Row(
+                  children: [
+                    NavigationRail(
+                      extended: extended,
+                      selectedIndex: selectedIndex < 0 ? null : selectedIndex,
+                      labelType: extended ? NavigationRailLabelType.none : NavigationRailLabelType.all,
+                      onDestinationSelected: (i) => context.go(destinations[i].path),
+                      destinations: [
+                        for (final d in destinations)
+                          NavigationRailDestination(
+                            icon: d.section == AppSection.alerts && canReadAlerts
+                                ? _AlertsIcon(icon: _iconFor(d.section))
+                                : Icon(_iconFor(d.section)),
+                            label: Text(d.label),
+                          ),
+                      ],
+                    ),
+                    const VerticalDivider(width: 1),
+                    Expanded(child: body),
                   ],
-                ),
-                const VerticalDivider(width: 1),
-                Expanded(child: body),
-              ])
-            : body,
-      );
-    });
+                )
+              : body,
+        );
+      },
+    );
 
     if (!canReadAlerts) return scaffold;
     return BlocProvider(
@@ -126,14 +135,14 @@ class _AlertsIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocSelector<CriticalAlertsCubit, CriticalAlertsState, int>(
-        selector: (s) => s.open.length,
-        builder: (context, count) => Badge(
-          isLabelVisible: count > 0,
-          label: Text('$count'),
-          backgroundColor: OpsColors.of(context).danger,
-          child: Icon(icon),
-        ),
-      );
+    selector: (s) => s.open.length,
+    builder: (context, count) => Badge(
+      isLabelVisible: count > 0,
+      label: Text('$count'),
+      backgroundColor: OpsColors.of(context).danger,
+      child: Icon(icon),
+    ),
+  );
 }
 
 class _TopBar extends StatelessWidget implements PreferredSizeWidget {
@@ -154,12 +163,13 @@ class _TopBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: 60,
       automaticallyImplyLeading: showMenuButton,
       titleSpacing: showMenuButton ? 0 : 16,
-      title: Row(children: [
-        Icon(Icons.hub_outlined, color: theme.colorScheme.primary),
-        const SizedBox(width: 8),
-        if (!compact) ...[const Text('badrgo Ops'), const SizedBox(width: 16)],
-        const _LiveIndicator(),
-      ]),
+      title: Row(
+        children: [
+          BrandMark(size: 24, suffix: compact ? null : 'Ops'),
+          const SizedBox(width: 16),
+          const _LiveIndicator(),
+        ],
+      ),
       actions: [
         IconButton(
           tooltip: 'Toggle dark mode',
@@ -177,35 +187,40 @@ class _TopBar extends StatelessWidget implements PreferredSizeWidget {
             if (compact)
               PopupMenuItem(
                 enabled: false,
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(user.name, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
-                  Text('${user.roleLabel} · ${user.cityLabel}', style: theme.textTheme.bodySmall),
-                ]),
-              ),
-            PopupMenuItem(
-              enabled: false,
-              child: Text(user.roleDescription, style: theme.textTheme.bodySmall),
-            ),
-            const PopupMenuDivider(),
-            const PopupMenuItem(value: 'sign-out', child: ListTile(leading: Icon(Icons.logout), title: Text('Sign out'))),
-          ],
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: compact ? 4 : 12),
-            child: Row(children: [
-              CircleAvatar(radius: 16, child: Text(user.name.isEmpty ? '?' : user.name[0])),
-              if (!compact) ...[
-                const SizedBox(width: 10),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(user.name, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
                     Text('${user.roleLabel} · ${user.cityLabel}', style: theme.textTheme.bodySmall),
                   ],
                 ),
+              ),
+            PopupMenuItem(enabled: false, child: Text(user.roleDescription, style: theme.textTheme.bodySmall)),
+            const PopupMenuDivider(),
+            const PopupMenuItem(
+              value: 'sign-out',
+              child: ListTile(leading: Icon(Icons.logout), title: Text('Sign out')),
+            ),
+          ],
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: compact ? 4 : 12),
+            child: Row(
+              children: [
+                CircleAvatar(radius: 16, child: Text(user.name.isEmpty ? '?' : user.name[0])),
+                if (!compact) ...[
+                  const SizedBox(width: 10),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(user.name, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+                      Text('${user.roleLabel} · ${user.cityLabel}', style: theme.textTheme.bodySmall),
+                    ],
+                  ),
+                ],
+                const Icon(Icons.arrow_drop_down),
               ],
-              const Icon(Icons.arrow_drop_down),
-            ]),
+            ),
           ),
         ),
         const SizedBox(width: 8),
@@ -219,30 +234,30 @@ class _LiveIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocBuilder<LiveStatusCubit, LiveStatusState>(
-        builder: (context, state) {
-          final ops = OpsColors.of(context);
-          final (label, color) = state.anyTroubled
-              ? ('Reconnecting', ops.warning)
-              : state.anyOpen
-                  ? ('Live', ops.success)
-                  : ('Connecting', ops.neutral);
-          return Tooltip(
-            message: 'Events (SSE): ${state.events.phase.name}\nDriver socket (WS): ${state.socket.phase.name}',
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(999),
-              ),
-              child: Row(mainAxisSize: MainAxisSize.min, children: [
-                Icon(Icons.circle, size: 8, color: color),
-                const SizedBox(width: 6),
-                Text(label, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: color)),
-              ]),
-            ),
-          );
-        },
+    builder: (context, state) {
+      final ops = OpsColors.of(context);
+      final (label, color) = state.anyTroubled
+          ? ('Reconnecting', ops.warning)
+          : state.anyOpen
+          ? ('Live', ops.success)
+          : ('Connecting', ops.neutral);
+      return Tooltip(
+        message: 'Events (SSE): ${state.events.phase.name}\nDriver socket (WS): ${state.socket.phase.name}',
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(999)),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.circle, size: 8, color: color),
+              const SizedBox(width: 6),
+              Text(label, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: color)),
+            ],
+          ),
+        ),
       );
+    },
+  );
 }
 
 /// The lighter states: realtime retrying while the API is up, or the
@@ -271,14 +286,15 @@ class _ConnectionStrip extends StatelessWidget {
         if (live.events.isTroubled) 'live events',
         if (live.socket.isTroubled) 'driver feed',
       ].join(' and ');
-      final attempt = [live.events, live.socket]
-          .where((s) => s.phase == RealtimePhase.reconnecting)
-          .map((s) => s.attempt)
-          .fold(0, (a, b) => a > b ? a : b);
+      final attempt = [
+        live.events,
+        live.socket,
+      ].where((s) => s.phase == RealtimePhase.reconnecting).map((s) => s.attempt).fold(0, (a, b) => a > b ? a : b);
       return StatusStrip(
         icon: Icons.sync,
         color: ops.warning,
-        text: 'Reconnecting $which${attempt > 0 ? ' (attempt $attempt)' : ''}… missed events are replayed when we are back.',
+        text:
+            'Reconnecting $which${attempt > 0 ? ' (attempt $attempt)' : ''}… missed events are replayed when we are back.',
       );
     }
     return const SizedBox.shrink();

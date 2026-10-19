@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/presentation/theme.dart';
+import '../../../core/presentation/widgets/brand_mark.dart';
 import 'bloc/auth_bloc.dart';
 
 class SignInPage extends StatefulWidget {
@@ -75,18 +77,12 @@ class _SignInPageState extends State<SignInPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Row(
-                    children: [
-                      Icon(Icons.hub_outlined, color: theme.colorScheme.primary, size: 32),
-                      const SizedBox(width: 12),
-                      Text('badrgo Ops Console', style: theme.textTheme.titleLarge),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
+                  const BrandMark(size: 30, suffix: 'Ops Console'),
+                  const SizedBox(height: 12),
                   Text('Sign in to the operations dashboard.', style: theme.textTheme.bodyMedium),
                   const SizedBox(height: 24),
                   if (state.notice != null && state.signInError == null) ...[
-                    _Notice(text: state.notice!, color: theme.colorScheme.primary, icon: Icons.info_outline),
+                    _Notice(text: state.notice!, color: OpsColors.of(context).info, icon: Icons.info_outline),
                     const SizedBox(height: 16),
                   ],
                   if (state.signInError != null) ...[
@@ -175,28 +171,16 @@ class _BrandPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
     const onBrand = Colors.white;
+    // Solid brand red, like the hero panel on badrgo.com.
     return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [scheme.primary, Color.lerp(scheme.primary, Colors.black, 0.45)!],
-        ),
-      ),
+      color: AppTheme.brandRed,
       padding: const EdgeInsets.all(48),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              const Icon(Icons.hub_outlined, color: onBrand, size: 28),
-              const SizedBox(width: 10),
-              Text('badrgo Ops', style: text.titleLarge?.copyWith(color: onBrand)),
-            ],
-          ),
+          const BrandMark(size: 32, suffix: 'Ops', color: onBrand),
           const Spacer(),
           Text(
             'City operations,\nlive.',

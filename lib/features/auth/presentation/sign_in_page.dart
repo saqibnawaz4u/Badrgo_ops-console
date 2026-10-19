@@ -77,7 +77,7 @@ class _SignInPageState extends State<SignInPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const BrandMark(size: 30, suffix: 'Ops Console'),
+                  const BrandMark(height: 52, suffix: 'Ops Console'),
                   const SizedBox(height: 12),
                   Text('Sign in to the operations dashboard.', style: theme.textTheme.bodyMedium),
                   const SizedBox(height: 24),
@@ -180,7 +180,7 @@ class _BrandPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const BrandMark(size: 32, suffix: 'Ops', color: onBrand),
+          const BrandMark(height: 60, suffix: 'Ops', color: onBrand),
           const Spacer(),
           Text(
             'City operations,\nlive.',

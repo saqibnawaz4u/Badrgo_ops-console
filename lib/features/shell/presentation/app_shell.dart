@@ -165,7 +165,7 @@ class _TopBar extends StatelessWidget implements PreferredSizeWidget {
       titleSpacing: showMenuButton ? 0 : 16,
       title: Row(
         children: [
-          BrandMark(size: 24, suffix: compact ? null : 'Ops'),
+          BrandMark(height: 40, suffix: compact ? null : 'Ops'),
           const SizedBox(width: 16),
           const _LiveIndicator(),
         ],

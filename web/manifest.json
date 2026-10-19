@@ -1,11 +1,11 @@
 {
-    "name": "badrgo_ops_console",
-    "short_name": "badrgo_ops_console",
+    "name": "badrgo Ops Console",
+    "short_name": "badrgo Ops",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#FFFFFF",
+    "theme_color": "#CE0E2D",
+    "description": "Live operations dashboard for badrgo.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

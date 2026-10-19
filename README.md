@@ -121,7 +121,7 @@ An open SOS shows a red banner above every page, with Open trip, Acknowledge (if
 
 ## Branding
 
-Colours and type follow [badrgo.com](https://badrgo.com/qa/): brand red `#CF1B1C` for primary actions, selection and the wordmark, neutral greys for text and surfaces, and Clash Grotesk for headings and the "badrgo" wordmark. Status colours stay semantic (in-progress trips are violet, not red), because red in an operations console means an error or an SOS.
+Colours and type follow [badrgo.com](https://badrgo.com/qa/) and the official logo (`assets/brand/badrgo_logo.svg`, rendered with `flutter_svg`): brand red `#CE0E2D` for primary actions, selection and the logo, neutral greys for text and surfaces, and Clash Grotesk for headings. Status colours stay semantic (in-progress trips are violet, not red), because red in an operations console means an error or an SOS.
 
 Clash Grotesk's licence (ITF Free Font License) does not allow putting the font files in a repository, so they are not committed. `BrandFont.load` fetches them from Fontshare's own servers at start-up, which the licence allows. If that fails (offline or blocked), headings fall back to the default font and the app works the same.
 
@@ -137,6 +137,7 @@ Clash Grotesk's licence (ITF Free Font License) does not allow putting the font 
 | `flutter_map` + OpenStreetMap tiles | No API key needed. Markers are replaced on every snapshot (the API sends full snapshots, not deltas). |
 | `fl_chart` | Line chart for the trips series. |
 | `shared_preferences` | Persists the session token, so a page refresh keeps the user signed in. |
+| `flutter_svg` | Renders the official badrgo logo from its SVG, sharp at every size and recoloured white on the red panel. |
 | `mocktail`, `bloc_test` | Repository and Bloc fakes in widget tests. |
 
 ## Tests

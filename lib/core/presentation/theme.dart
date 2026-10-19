@@ -94,8 +94,8 @@ class OpsColors extends ThemeExtension<OpsColors> {
 class AppTheme {
   const AppTheme._();
 
-  /// badrgo's brand red, as used on badrgo.com.
-  static const brandRed = Color(0xFFCF1B1C);
+  /// badrgo's brand red, taken from the official logo.
+  static const brandRed = Color(0xFFCE0E2D);
 
   static ThemeData light() => _build(Brightness.light, OpsColors.light);
 

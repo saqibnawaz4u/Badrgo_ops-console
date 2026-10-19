@@ -4,3 +4,20 @@ analyzer:
   exclude:
     - build/**
     - web/**
+  language:
+    strict-casts: false
+    strict-raw-types: true
+
+linter:
+  rules:
+    # We keep explicit named constructor params mapped to private fields;
+    # the newer private-named-parameter syntax reads oddly to most readers.
+    prefer_initializing_formals: false
+    prefer_single_quotes: true
+    prefer_const_constructors: true
+    prefer_final_locals: true
+    avoid_print: true
+    unawaited_futures: true
+    always_declare_return_types: true
+    cancel_subscriptions: true
+    close_sinks: true
